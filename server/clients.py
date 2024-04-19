@@ -580,3 +580,31 @@ class ClientAO2d10(DefaultDROProtocol):
     PW_INBOUND = [
         ('password', ArgType.STR_OR_EMPTY),  # 0
     ]
+
+
+class ClientAO2d10d1(ClientAO2d10):
+    # This is actually part of AO Golden, but development ceased and the version packet was not updated.
+    TT_INBOUND = [
+        ('state', ArgType.INT),  # 0
+        ('char_name', ArgType.STR),  # 1
+        ('emote_name', ArgType.STR),  # 2
+    ]
+    TT_OUTBOUND = [
+        ('state', 0),  # 0
+        ('char_name', ''),  # 1
+        ('emote_name', ''),  # 2
+    ]
+
+    CU_INBOUND = [
+        ('authority', ArgType.INT),  # 0
+        ('action', ArgType.INT),  # 1
+        ('char_name', ArgType.STR),  # 2
+        ('link', ArgType.STR),  # 3
+    ]
+
+    CU_OUTBOUND = [
+        ('authority', 0),  # 0
+        ('action', 0),  # 1
+        ('char_name', ''),  # 2
+        ('link', ''),  # 3
+    ]

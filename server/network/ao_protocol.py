@@ -211,7 +211,7 @@ class AOProtocol(asyncio.Protocol):
             if 'ID' not in self.client.required_packets_received:
                 return False
 
-        if len(args) != len(types):
+        if len(args) > len(types):
             return False
         for i, arg in enumerate(args):
             if len(arg) == 0 and types[i] != ArgType.STR_OR_EMPTY:
@@ -342,4 +342,8 @@ class AOProtocol(asyncio.Protocol):
                        needs_auth=False),  # pair offset
         'PAIR': _command(function=ao_commands.net_cmd_pair,
                        needs_auth=False),  # Pair
+        'TT': _command(function=ao_commands.net_cmd_tt,
+                       needs_auth=False),  # message typing packet
+        'CU': _command(function=ao_commands.net_cmd_cu,
+                       needs_auth=False),  # character url packet
     }
