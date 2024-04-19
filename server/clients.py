@@ -493,6 +493,7 @@ class ClientAO2d10(DefaultDROProtocol):
     REPLACES_BASE_OPUS_FOR_MP3 = True
     ALLOWS_CHAR_LIST_RELOAD = True
     HAS_HIDE_CHARACTER_AS_MS_ARGUMENT = False
+    HAS_CLIENTSIDE_MUSIC_LOOPING = True
 
     MS_INBOUND = [
         ('msg_type', ArgType.STR),  # 0
