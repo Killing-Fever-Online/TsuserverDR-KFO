@@ -588,7 +588,7 @@ class ClientAO2d10d1(ClientAO2d10):
     TT_INBOUND = [
         ('state', ArgType.INT),  # 0
         ('char_name', ArgType.STR),  # 1
-        ('emote_name', ArgType.STR),  # 2
+        ('emote_name', ArgType.STR, True),  # 2, optional
     ]
     TT_OUTBOUND = [
         ('state', 0),  # 0

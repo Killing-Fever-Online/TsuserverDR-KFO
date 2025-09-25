@@ -211,7 +211,7 @@ class AOProtocol(asyncio.Protocol):
             if 'ID' not in self.client.required_packets_received:
                 return False
 
-        if len(args) > len(types):
+        if len(args) != len(types):
             return False
         for i, arg in enumerate(args):
             if len(arg) == 0 and types[i] != ArgType.STR_OR_EMPTY:
