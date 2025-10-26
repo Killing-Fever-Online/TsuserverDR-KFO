@@ -242,7 +242,7 @@ class DefaultDROProtocol():
         ('pre', ArgType.STR_OR_EMPTY),  # 1
         ('folder', ArgType.STR),  # 2
         ('anim', ArgType.STR),  # 3
-        ('text', ArgType.STR),  # 4
+        ('text', ArgType.STR_OR_EMPTY),  # 4
         ('pos', ArgType.STR),  # 5
         ('sfx', ArgType.STR_OR_EMPTY),  # 6
         ('anim_type', ArgType.INT),  # 7
@@ -653,7 +653,7 @@ class ClientAO2d10(DefaultDROProtocol):
         ('pre', ArgType.STR_OR_EMPTY),  # 1
         ('folder', ArgType.STR),  # 2
         ('anim', ArgType.STR),  # 3
-        ('text', ArgType.STR),  # 4
+        ('text', ArgType.STR_OR_EMPTY),  # 4
         ('pos', ArgType.STR),  # 5
         ('sfx', ArgType.STR),  # 6
         ('anim_type', ArgType.INT),  # 7

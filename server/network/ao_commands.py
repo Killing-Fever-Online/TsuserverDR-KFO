@@ -398,15 +398,13 @@ def net_cmd_ms(client: ClientManager.Client, pargs: Dict[str, Any]):
         return
     # Trim out any leading/trailing whitespace characters up to a chain of spaces
     pargs['text'] = Constants.trim_extra_whitespace(pargs['text'])
-    # Check if after all of this, the message is empty. If so, ignore
-    if not pargs['text']:
-        return
 
     # First, check if the player just sent the same message with the same character and did
     # not receive any other messages in the meantime.
     # This helps prevent record these messages and retransmit it to clients who may want to
-    # filter these out
-    if (pargs['text'] == client.last_ic_raw_message
+    # filter these out. However, whitespace is allowed for blankposting/emote changing
+    if (pargs['text'].strip() != ''
+        and pargs['text'] == client.last_ic_raw_message
         and client.last_received_ic[0] == client
             and client.get_char_name() == client.last_ic_char):
         return
