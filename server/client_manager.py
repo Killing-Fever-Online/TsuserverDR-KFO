@@ -2507,10 +2507,6 @@ class ClientManager:
 
         # Check if server is full, and if so, send number of players and disconnect
         if cur_id == -1:
-            c.send_command_dict('PN', {
-                'player_count': self.server.get_player_count(),
-                'player_limit': self.server.config['playerlimit']
-            })
             return c, False
         self.cur_id[cur_id] = True
         self.server.task_manager.tasks[c] = dict()
