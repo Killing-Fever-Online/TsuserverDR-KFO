@@ -183,8 +183,8 @@ class TsuserverDR:
         if self.config['local']:
             self.local_connection = asyncio.create_task(Constants.do_nothing())
             
-        if self.config["ws_enabled"]:
-                    # Check if port is available
+        if self.config.get("ws_enabled"):
+            # Check if port is available
             ws_port = self.config['ws_port']
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 try:

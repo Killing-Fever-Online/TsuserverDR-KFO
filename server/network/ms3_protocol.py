@@ -57,10 +57,10 @@ class MasterServerClient():
 
         self._ms_ip: str = self.server.config['masterserver_ip']
         self._own_port: int = self.server.config['port']
-        self._own_ws_enabled: bool = self.server.config["ws_enabled"]
+        self._own_ws_enabled: bool = self.server.config.get("ws_enabled")
 
         if self._own_ws_enabled:
-            if hasattr(self.server.config, 'ws_override_port') and self.server.config['ws_override_port'] != -1:
+            if self.server.config.get("ws_override_port") != -1:
                 self._own_ws_port: int = self.server.config['ws_override_port']
             else:
                 self._own_ws_port: int = self.server.config['ws_port']
