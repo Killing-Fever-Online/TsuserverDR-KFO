@@ -82,10 +82,9 @@ def new_websocket_client(server):
     """
     Factory for creating a new WebSocket client.
     :param server: server object
-
     """
 
-    async def func(websocket, _):
+    async def func(websocket):
         client = AOProtocolWS(server, websocket)
         while client.ws_connected:
             await client.ws_handle()
