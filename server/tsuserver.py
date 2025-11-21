@@ -188,10 +188,10 @@ class TsuserverDR:
             ws_port = self.config['ws_port']
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 try:
-                    s.bind((bound_ip, port))
+                    s.bind((bound_ip, ws_port))
                 except socket.error as exc:
                     if exc.errno == errno.EADDRINUSE:
-                        msg = (f'Websocket Port {port} is in use by another application. Make sure to close any '
+                        msg = (f'Websocket Port {ws_port} is in use by another application. Make sure to close any '
                            f'conflicting applications (even another instance of this server) and '
                            f'try again.')
                         raise ServerError(msg)
@@ -205,6 +205,13 @@ class TsuserverDR:
                     self), bound_ip, ws_port
             )
             asyncio.ensure_future(ao_server_ws)
+            if host_ip is not None:
+                logger.log_pdebug(f'Websocket Server should be now accessible from address {host_ip} and port '
+                              f'{self.config["ws_port"]}.')
+            if not self.config['local']:
+                logger.log_pdebug(f'If you want to join your server from this device via websockets, you may need to '
+                                f'join instead from address 127.0.0.1 and port '
+                                f'{self.config["ws_port"]}.')
 
         if self.config['use_masterserver']:
             self.ms_client = MasterServerClient(self)
