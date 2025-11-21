@@ -4,6 +4,7 @@ from websockets import ConnectionClosed
 
 from server.network.ao_protocol import AOProtocol
 
+# This code has been shamelessly copy pasted from https://github.com/Crystalwarrior/KFO-Server/commit/412212c20aa9ecb9952634d0facc0c687594f7ff
 
 class AOProtocolWS(AOProtocol):
     """A websocket wrapper around AOProtocol."""
