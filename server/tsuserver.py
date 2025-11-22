@@ -36,6 +36,7 @@ import traceback
 import typing
 import urllib.request
 import urllib.error
+import websockets
 
 from server import logger
 from server.ban_manager import BanManager
@@ -44,6 +45,7 @@ from server.client_manager import ClientManager
 from server.exceptions import ServerError
 from server.hub_manager import HubManager
 from server.network.ao_protocol import AOProtocol
+from server.network.ao_protocol_ws import new_websocket_client
 from server.network.ms3_protocol import MasterServerClient
 from server.party_manager import PartyManager
 from server.task_manager import TaskManager
@@ -51,6 +53,7 @@ from server.timer_manager import TimerManager
 
 from server.validate.config import ValidateConfig
 from server.validate.gimp import ValidateGimp
+
 
 if typing.TYPE_CHECKING:
     from asyncio.proactor_events import _ProactorSocketTransport
@@ -179,6 +182,36 @@ class TsuserverDR:
 
         if self.config['local']:
             self.local_connection = asyncio.create_task(Constants.do_nothing())
+            
+        if self.config.get("ws_enabled"):
+            # Check if port is available
+            ws_port = self.config['ws_port']
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                try:
+                    s.bind((bound_ip, ws_port))
+                except socket.error as exc:
+                    if exc.errno == errno.EADDRINUSE:
+                        msg = (f'Websocket Port {ws_port} is in use by another application. Make sure to close any '
+                           f'conflicting applications (even another instance of this server) and '
+                           f'try again.')
+                        raise ServerError(msg)
+                    raise exc
+                except OverflowError as exc:
+                    msg = str(exc).replace('bind(): ', '').capitalize()
+                    msg += ' Make sure to set your port number to an appropriate value and try again.'
+                    raise ServerError(msg)
+            ao_server_ws = websockets.serve(
+                new_websocket_client(
+                    self), bound_ip, ws_port
+            )
+            asyncio.ensure_future(ao_server_ws)
+            if host_ip is not None:
+                logger.log_pdebug(f'Websocket Server should be now accessible from address {host_ip} and port '
+                              f'{self.config["ws_port"]}.')
+            if not self.config['local']:
+                logger.log_pdebug(f'If you want to join your server from this device via websockets, you may need to '
+                                f'join instead from address 127.0.0.1 and port '
+                                f'{self.config["ws_port"]}.')
 
         if self.config['use_masterserver']:
             self.ms_client = MasterServerClient(self)

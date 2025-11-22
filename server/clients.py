@@ -734,3 +734,5 @@ class ClientAO2d10(DefaultDROProtocol):
     PW_INBOUND = [
         ('password', ArgType.STR_OR_EMPTY),  # 0
     ]
+    
+ClientAO2latest = ClientAO2d10

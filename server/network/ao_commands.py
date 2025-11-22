@@ -122,7 +122,7 @@ def net_cmd_id(client: ClientManager.Client, pargs: Dict[str, Any]):
             return False
 
         # Such versions include DRO and AO
-        if pargs['client_software'] not in ['DRO', 'AO2']:
+        if pargs['client_software'] not in ['DRO', 'AO2', 'webAO']:
             return False
 
         versionBase = client.incoming_msg_id
@@ -196,6 +196,8 @@ def net_cmd_id(client: ClientManager.Client, pargs: Dict[str, Any]):
                     return False  # Unrecognized
             else:
                 return False  # Unrecognized
+        elif software == 'webAO':
+            client.packet_handler = clients.ClientAO2latest()
         else:
             raise RuntimeError(f'{software}')
 
@@ -259,7 +261,6 @@ def net_cmd_askchaa(client: ClientManager.Client, pargs: Dict[str, Any]):
         'evidence_count': evi_cnt,
         'music_list_count': music_cnt+area_cnt,
     })
-
 
 def net_cmd_ae(client: ClientManager.Client, pargs: Dict[str, Any]):
     """ Asks for specific pages of the evidence list.

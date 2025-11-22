@@ -84,7 +84,7 @@ class AOProtocol(asyncio.Protocol):
             self.client.disconnect()
             return
 
-        fantacrypt_key = 34  # just fantacrypt things
+        fantacrypt_key = "NOENCRYPT"  # FANTACRYPT IS DEAD.
         self.client.incoming_msg_id = -1
         if self.server.config['strict_client_check']:
             self.client.incoming_msg_id = random.randint(100000, 999999)
@@ -172,8 +172,11 @@ class AOProtocol(asyncio.Protocol):
             buf = b''
 
         # try to decode as utf-8, ignore any erroneous characters
-        self.buffer += buf.decode('utf-8', 'ignore')
-        self.buffer = self.buffer.translate({ord(c): None for c in '\0'})
+        if not isinstance(buf, str):
+            self.buffer += buf.decode('utf-8', 'ignore')
+            self.buffer = self.buffer.translate({ord(c): None for c in '\0'})
+        else:
+            self.buffer = buf
 
         if len(self.buffer) > 8192:
             logger.log_server(f'Terminated {self.client.get_ipreal()} (packet too long): '
