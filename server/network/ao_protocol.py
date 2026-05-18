@@ -276,6 +276,10 @@ class AOProtocol(asyncio.Protocol):
         command, *args = Constants.encode_ao_packet([command] + list(args))
         message = f'{command}#'
         for arg in args:
+            # Evidence packet uses tuples to construct its evidence entries
+            if type(arg) is tuple:
+                # AO2 evidence packet uses & to separate pieces of evidence
+                arg = "&".join(arg)
             message += f'{arg}#'
         message += '%'
 
@@ -349,6 +353,10 @@ class AOProtocol(asyncio.Protocol):
                        needs_auth=False),  # pair offset
         'PAIR': _command(function=ao_commands.net_cmd_pair,
                        needs_auth=False),  # Pair
+        'TT': _command(function=ao_commands.net_cmd_tt,
+                       needs_auth=False),  # message typing packet
+        'CU': _command(function=ao_commands.net_cmd_cu,
+                       needs_auth=False),  # character url packet
         'PAIRL': _command(function=ao_commands.net_cmd_pairl,
                        needs_auth=False),  # Pair
         'STATUS': _command(function=ao_commands.net_cmd_status,

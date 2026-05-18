@@ -190,6 +190,9 @@ class ClientManager:
             # modifications that it may have undergone afterwards (say, via gimp, gag, etc.)
             self.last_ic_char = ''  # The char they used to send their last IC message, not
             # necessarily equivalent to self.get_char_name()
+            
+            # the time since last ic message was sent by this person.
+            self.last_ic_message_time = 0.0
 
             # music flood-guard stuff
             self.mute_time = 0
@@ -867,8 +870,9 @@ class ClientManager:
             self.send_investigation()
 
         def send_evidence_list(self):
+            evidence_list = self.area.get_evidence_list(self)
             self.send_command_dict('LE', {
-                'evidence_ao2_list': self.area.get_evidence_list(self)
+                'evidence_ao2_list': evidence_list
             })
 
         def send_health(self, side=None, health=None):
@@ -2024,8 +2028,7 @@ class ClientManager:
             auth_command(arg, announce_to_officers=announce_to_officers)
 
             # The following actions are true for all logged in roles
-            if self.area.evidence_mod == 'HiddenCM':
-                self.area.broadcast_evidence_list()
+            self.area.broadcast_evidence_list()
             self.send_music_list_view()  # Update music list to show all areas
 
             self.send_ooc('Logged in as a {}.'.format(role))
@@ -2153,8 +2156,7 @@ class ClientManager:
             self.is_cm = False
 
             # Clean-up operations
-            if self.area.evidence_mod == 'HiddenCM':
-                self.area.broadcast_evidence_list()
+            self.area.broadcast_evidence_list()
 
             # Update the music list to show reachable areas and activate the AFK timer
             self.send_music_list_view()
@@ -2317,6 +2319,9 @@ class ClientManager:
                     raise ClientError(
                         'You have not provided a download link for your files.')
             self.send_player_list_to_area()
+        
+        def can_send_message(self):
+            return (time.time() - self.last_ic_message_time) >= self.area.minimum_message_interval
 
         def get_info(self, as_mod: bool = False, as_cm: bool = False, identifier=None):
             if identifier is None:

@@ -70,10 +70,12 @@ class TsuserverDR:
         self._server = None  # Internal server object, changed to proper object later
 
         self.release = 5
-        self.major_version = 4
-        self.minor_version = 2
+        self.major_version = 5
+        self.minor_version = 1
         self.segment_version = ''
-        self.internal_version = '250628a'
+        # YYMMDDa where a corresponds to the number of commits pushed to the target branch.
+        # This is too complex to calculate manually so it should be automated in the future
+        self.internal_version = '260511b'
         version_string = self.get_version_string()
         self.software = 'TsuserverDR {}'.format(version_string)
         self.version = 'TsuserverDR {} ({})'.format(version_string, self.internal_version)
